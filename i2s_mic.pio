@@ -5,9 +5,17 @@
 ;
 
 .program i2s_mic
-.side_set 1
+.side_set 2
 .wrap_target
+	set x, 30 side 0
+ws0:
 	nop side 1
-	nop side 0
+	jmp x-- ws0 side 0
+	nop side 1
+	set x, 30 side 2
+ws1:
+	nop side 3
+	jmp x-- ws1 side 2
+	nop side 3
 .wrap
 
