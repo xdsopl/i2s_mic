@@ -1,0 +1,13 @@
+;
+; Playing with the INMP441 I2S microphone on the Raspberry Pi Pico
+;
+; Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
+;
+
+.program i2s_mic
+	set pindirs, 1
+.wrap_target
+	set pins, 1
+	set pins, 0
+.wrap
+
