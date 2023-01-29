@@ -18,7 +18,7 @@ int main()
 	pio_gpio_init(pio, clk_pin);
 	pio_sm_set_consecutive_pindirs(pio, sm, clk_pin, 1, true);
 	pio_sm_config c = i2s_mic_program_get_default_config(offset);
-	sm_config_set_set_pins(&c, clk_pin, 1);
+	sm_config_set_sideset_pins(&c, clk_pin);
 	sm_config_set_clkdiv_int_frac(&c, 122, 18);
 	pio_sm_init(pio, sm, offset, &c);
 	pio_sm_set_enabled(pio, sm, true);
