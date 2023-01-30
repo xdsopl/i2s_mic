@@ -12,7 +12,7 @@
 left:
 	in pins, 1 side 1
 	jmp x-- left side 0
-	in null, 8 side 1
+	push side 1
 	set x, 4 side 0
 pad:
 	nop side 1

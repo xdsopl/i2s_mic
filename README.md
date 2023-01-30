@@ -5,6 +5,6 @@
 
 ```
 stty -F /dev/ttyACM0 raw
-aplay -f S32_LE -c 1 -r 8000 /dev/ttyACM0
+aplay -f S24_LE -c 1 -r 8000 /dev/ttyACM0
 ```
 
