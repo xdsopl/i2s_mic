@@ -35,7 +35,6 @@ int main()
 		putchar_raw((left >> 0) & 255);
 		putchar_raw((left >> 8) & 255);
 		putchar_raw((left >> 16) & 255);
-		putchar_raw((left >> 24) & 255);
 	}
 	return 0;
 }
