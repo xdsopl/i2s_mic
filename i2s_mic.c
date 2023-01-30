@@ -31,10 +31,11 @@ int main()
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
 	while (1) {
-		int32_t left = pio_sm_get_blocking(pio, sm);
-		left >>= 24;
-		left += 128;
-		putchar_raw(left);
+		uint32_t left = pio_sm_get_blocking(pio, sm);
+		putchar_raw((left >> 0) & 255);
+		putchar_raw((left >> 8) & 255);
+		putchar_raw((left >> 16) & 255);
+		putchar_raw((left >> 24) & 255);
 	}
 	return 0;
 }
