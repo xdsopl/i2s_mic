@@ -34,7 +34,7 @@ int main()
 		int32_t left = pio_sm_get_blocking(pio, sm);
 		left >>= 24;
 		left += 128;
-		putchar_unlocked(left);
+		putchar_raw(left);
 	}
 	return 0;
 }
