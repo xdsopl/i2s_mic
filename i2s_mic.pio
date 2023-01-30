@@ -8,12 +8,12 @@
 .side_set 2
 .wrap_target
 	nop side 1
-	set x, 24 side 0
+	set x, 23 side 0
 left:
 	in pins, 1 side 1
 	jmp x-- left side 0
 	in null, 8 side 1
-	set x, 3 side 0
+	set x, 4 side 0
 pad:
 	nop side 1
 	jmp x-- pad side 0
