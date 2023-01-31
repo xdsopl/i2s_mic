@@ -24,17 +24,32 @@ int main()
 	pio_sm_config conf = i2s_mic_program_get_default_config(offset);
 	sm_config_set_in_pins(&conf, sd_pin);
 	sm_config_set_sideset_pins(&conf, sck_ws_pins);
-	sm_config_set_in_shift(&conf, false, false, 24);
+	sm_config_set_in_shift(&conf, false, true, 32);
 	sm_config_set_fifo_join(&conf, PIO_FIFO_JOIN_RX);
 	sm_config_set_clkdiv_int_frac(&conf, 122, 18);
 	pio_sm_init(pio, sm, offset, &conf);
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
 	while (1) {
-		uint32_t left = pio_sm_get_blocking(pio, sm);
-		putchar_raw((left >> 0) & 255);
-		putchar_raw((left >> 8) & 255);
-		putchar_raw((left >> 16) & 255);
+		uint32_t abca = pio_sm_get_blocking(pio, sm);
+		uint32_t bcab = pio_sm_get_blocking(pio, sm);
+		uint32_t cabc = pio_sm_get_blocking(pio, sm);
+
+		putchar_raw((abca >> 8) & 255);
+		putchar_raw((abca >> 16) & 255);
+		putchar_raw((abca >> 24) & 255);
+
+		putchar_raw((bcab >> 16) & 255);
+		putchar_raw((bcab >> 24) & 255);
+		putchar_raw((abca >> 0) & 255);
+
+		putchar_raw((cabc >> 24) & 255);
+		putchar_raw((bcab >> 0) & 255);
+		putchar_raw((bcab >> 8) & 255);
+
+		putchar_raw((cabc >> 0) & 255);
+		putchar_raw((cabc >> 8) & 255);
+		putchar_raw((cabc >> 16) & 255);
 	}
 	return 0;
 }
