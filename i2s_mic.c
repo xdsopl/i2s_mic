@@ -30,12 +30,28 @@ int main()
 	pio_sm_init(pio, sm, offset, &conf);
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
+	int shift = 0, count = 0, second = 8000;
 	while (1) {
-		uint32_t left = pio_sm_get_blocking(pio, sm);
+		int32_t left = pio_sm_get_blocking(pio, sm);
+		left >>= 8;
+		uint32_t mag = left < 0 ? -left : left;
+		mag >>= 14;
+		int temp = 0;
+		while (mag >>= 1)
+			++temp;
+		if (temp >= shift) {
+			shift = temp;
+			count = second;
+		}
+		left >>= shift;
+		if (count)
+			--count;
+		else if (shift) {
+			--shift;
+			count = second;
+		}
 		putchar_raw((left >> 0) & 255);
 		putchar_raw((left >> 8) & 255);
-		putchar_raw((left >> 16) & 255);
-		putchar_raw((left >> 24) & 255);
 	}
 	return 0;
 }
