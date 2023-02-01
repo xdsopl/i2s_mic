@@ -35,7 +35,7 @@ int main()
 		int32_t left = pio_sm_get_blocking(pio, sm);
 		left >>= 8;
 		uint32_t mag = left < 0 ? -left : left;
-		mag >>= 14;
+		mag >>= 6;
 		int temp = 0;
 		while (mag >>= 1)
 			++temp;
@@ -44,14 +44,15 @@ int main()
 			count = second;
 		}
 		left >>= shift;
+		left += 128;
+		left &= 255;
 		if (count)
 			--count;
 		else if (shift) {
 			--shift;
 			count = second;
 		}
-		putchar_raw((left >> 0) & 255);
-		putchar_raw((left >> 8) & 255);
+		putchar_raw(left);
 	}
 	return 0;
 }
