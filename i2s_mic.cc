@@ -31,14 +31,13 @@ int main()
 	pio_sm_init(pio, sm, offset, &conf);
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
-	AGC<int32_t, 8, 8000> agc;
+	AGC<int32_t, 16, 8000> agc;
 	while (1) {
 		int32_t left = pio_sm_get_blocking(pio, sm);
 		left >>= 8;
 		left = agc(left);
-		left += 128;
-		left &= 255;
-		putchar_raw(left);
+		putchar_raw((left >> 0) & 255);
+		putchar_raw((left >> 8) & 255);
 	}
 	return 0;
 }
