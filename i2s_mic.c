@@ -9,6 +9,31 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 #include "hardware/pio.h"
 #include "i2s_mic.pio.h"
 
+static inline int32_t agc(int32_t value, int bits, int hold)
+{
+	static int shift, count;
+	int32_t val_min = -(1 << (bits - 1));
+	int32_t val_max = (1 << (bits - 1)) - 1;
+	int32_t neg_mid = -(1 << (bits - 2));
+	int32_t pos_mid = (1 << (bits - 2)) - 1;
+
+	value >>= shift;
+	if (value < val_min || value > val_max) {
+		++shift;
+		count = hold;
+	} else if (value < pos_mid && value > neg_mid) {
+		if (count) {
+			--count;
+		} else if (shift) {
+			--shift;
+			count = hold;
+		}
+	} else {
+		count = hold;
+	}
+	return value;
+}
+
 int main()
 {
 	uint sd_pin = 2;
@@ -30,28 +55,12 @@ int main()
 	pio_sm_init(pio, sm, offset, &conf);
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
-	int shift = 0, count = 0, second = 8000;
 	while (1) {
 		int32_t left = pio_sm_get_blocking(pio, sm);
 		left >>= 8;
-		uint32_t mag = left < 0 ? -left : left;
-		mag >>= 6;
-		int temp = 0;
-		while (mag >>= 1)
-			++temp;
-		if (temp >= shift) {
-			shift = temp;
-			count = second;
-		}
-		left >>= shift;
+		left = agc(left, 8, 8000);
 		left += 128;
 		left &= 255;
-		if (count)
-			--count;
-		else if (shift) {
-			--shift;
-			count = second;
-		}
 		putchar_raw(left);
 	}
 	return 0;
