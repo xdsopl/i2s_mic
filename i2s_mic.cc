@@ -33,11 +33,12 @@ int main()
 	pio_sm_init(pio, sm, offset, &conf);
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
-	AGC<int32_t, 8, 8000> agc;
-	typedef Complex<int32_t> cmplx;
+	typedef int32_t value;
+	typedef Complex<value> cmplx;
+	AGC<value, 8, 8000> agc;
 	Hilbert<cmplx> hilbert;
 	while (1) {
-		int32_t left = pio_sm_get_blocking(pio, sm);
+		value left = pio_sm_get_blocking(pio, sm);
 		cmplx iq = hilbert(agc(left >> 8));
 		putchar_raw((iq.real() + 128) & 255);
 		putchar_raw((iq.imag() + 128) & 255);
