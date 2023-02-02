@@ -9,6 +9,7 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 #include "hardware/pio.h"
 #include "i2s_mic.pio.h"
 #include "complex.hh"
+#include "blockdc.hh"
 #include "hilbert.hh"
 #include "agc.hh"
 
@@ -35,11 +36,12 @@ int main()
 	stdio_init_all();
 	typedef int32_t value;
 	typedef Complex<value> cmplx;
+	BlockDC<value, 4> block_dc;
 	AGC<value, 8, 8000> agc;
 	Hilbert<cmplx> hilbert;
 	while (1) {
 		value left = pio_sm_get_blocking(pio, sm);
-		cmplx iq = hilbert(agc(left >> 8));
+		cmplx iq = hilbert(agc(block_dc(left >> 8)));
 		putchar_raw((iq.real() + 128) & 255);
 		putchar_raw((iq.imag() + 128) & 255);
 	}
