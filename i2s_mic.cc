@@ -8,6 +8,8 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "i2s_mic.pio.h"
+#include "complex.hh"
+#include "hilbert.hh"
 #include "agc.hh"
 
 int main()
@@ -32,13 +34,13 @@ int main()
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
 	AGC<int32_t, 8, 8000> agc;
+	typedef Complex<int32_t> cmplx;
+	Hilbert<cmplx> hilbert;
 	while (1) {
 		int32_t left = pio_sm_get_blocking(pio, sm);
-		left >>= 8;
-		left = agc(left);
-		left += 128;
-		left &= 255;
-		putchar_raw(left);
+		cmplx iq = hilbert(agc(left >> 8));
+		putchar_raw((iq.real() + 128) & 255);
+		putchar_raw((iq.imag() + 128) & 255);
 	}
 	return 0;
 }

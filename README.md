@@ -5,6 +5,6 @@
 
 ```
 stty -F /dev/ttyACM0 raw
-aplay -f U8 -c 1 -r 8000 /dev/ttyACM0
+aplay -f U8 -c 2 -r 8000 /dev/ttyACM0
 ```
 
