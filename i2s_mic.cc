@@ -9,30 +9,35 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 #include "hardware/pio.h"
 #include "i2s_mic.pio.h"
 
-static inline int32_t agc(int32_t value, int bits, int hold)
+template <typename TYPE, int BITS, int HOLD>
+class AGC
 {
-	static int shift, count;
-	int32_t val_min = -(1 << (bits - 1));
-	int32_t val_max = (1 << (bits - 1)) - 1;
-	int32_t neg_mid = -(1 << (bits - 2));
-	int32_t pos_mid = (1 << (bits - 2)) - 1;
-
-	value >>= shift;
-	if (value < val_min || value > val_max) {
-		++shift;
-		count = hold;
-	} else if (value < pos_mid && value > neg_mid) {
-		if (count) {
-			--count;
-		} else if (shift) {
-			--shift;
-			count = hold;
+	const TYPE val_min = -(1 << (BITS - 1));
+	const TYPE val_max = (1 << (BITS - 1)) - 1;
+	const TYPE neg_mid = -(1 << (BITS - 2));
+	const TYPE pos_mid = (1 << (BITS - 2)) - 1;
+	int shift = 0;
+	int count = 0;
+public:
+	TYPE operator () (TYPE value)
+	{
+		value >>= shift;
+		if (value < val_min || value > val_max) {
+			++shift;
+			count = HOLD;
+		} else if (value < pos_mid && value > neg_mid) {
+			if (count) {
+				--count;
+			} else if (shift) {
+				--shift;
+				count = HOLD;
+			}
+		} else {
+			count = HOLD;
 		}
-	} else {
-		count = hold;
+		return value;
 	}
-	return value;
-}
+};
 
 int main()
 {
@@ -55,10 +60,11 @@ int main()
 	pio_sm_init(pio, sm, offset, &conf);
 	pio_sm_set_enabled(pio, sm, true);
 	stdio_init_all();
+	AGC<int32_t, 8, 8000> agc;
 	while (1) {
 		int32_t left = pio_sm_get_blocking(pio, sm);
 		left >>= 8;
-		left = agc(left, 8, 8000);
+		left = agc(left);
 		left += 128;
 		left &= 255;
 		putchar_raw(left);
