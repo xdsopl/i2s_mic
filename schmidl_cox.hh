@@ -20,8 +20,8 @@ class SchmidlCox {
 public:
 	value operator()(cmplx iq) {
 		cmplx P = cor(delay(iq) * conj(iq));
-		value R = pwr(norm(iq)) / 2;
-		value timing = match(norm(P) / (R * R));
+		value R = pwr(norm(iq));
+		value timing = match(norm((P << 9) / R)) >> 16;
 		return timing;
 	}
 };

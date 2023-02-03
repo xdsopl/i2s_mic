@@ -74,6 +74,18 @@ static constexpr Complex<T> operator * (T a, Complex<T> b)
 }
 
 template <typename T>
+static constexpr Complex<T> operator << (Complex<T> b, int shift)
+{
+	return Complex<T>(b.real() << shift, b.imag() << shift);
+}
+
+template <typename T>
+static constexpr Complex<T> operator / (Complex<T> a, T b)
+{
+	return Complex<T>(a.real() / b, a.imag() / b);
+}
+
+template <typename T>
 static constexpr Complex<T> operator * (Complex<T> a, Complex<T> b)
 {
 	return Complex<T>(a.real() * b.real() - a.imag() * b.imag(), a.real() * b.imag() + a.imag() * b.real());
