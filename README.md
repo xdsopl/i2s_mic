@@ -4,7 +4,6 @@
 # quick testing:
 
 ```
-stty -F /dev/ttyACM0 raw
-aplay -f U8 -c 2 -r 8000 /dev/ttyACM0
+screen /dev/ttyACM0
 ```
 
