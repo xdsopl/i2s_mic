@@ -12,6 +12,7 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 #include "blockdc.hh"
 #include "hilbert.hh"
 #include "schmidl_cox.hh"
+#include "clipper.hh"
 #include "agc.hh"
 
 int main()
@@ -39,13 +40,14 @@ int main()
 	typedef Complex<value> cmplx;
 	BlockDC<value, 4> block_dc;
 	AGC<value, 8, 8000> agc;
+	Clipper<value, -127, 127> clip;
 	Hilbert<cmplx> hilbert;
 	const int symbol_len = 1280;
 	const int guard_len = symbol_len / 8;
 	SchmidlCox<cmplx, symbol_len/2, guard_len> correlator;
 	while (1) {
 		value left = pio_sm_get_blocking(pio, sm);
-		cmplx iq = hilbert(agc(block_dc(left >> 8)));
+		cmplx iq = hilbert(clip(agc(block_dc(left >> 8))));
 		value val = correlator(iq);
 		printf("%ld\n", val);
 	}
