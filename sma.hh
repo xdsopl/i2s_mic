@@ -11,7 +11,7 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 template <typename TYPE, int NUM>
 class SMA
 {
-	Delay<TYPE, NUM> delay;
+	Delay<TYPE, TYPE, NUM> delay;
 	TYPE sum = 0;
 public:
 	TYPE operator () (TYPE input)

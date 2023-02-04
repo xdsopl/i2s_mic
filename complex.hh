@@ -19,6 +19,11 @@ public:
 	constexpr T imag() const { return im; }
 	inline void real(T r) { re = r; }
 	inline void imag(T i) { im = i; }
+	template <typename O>
+	inline operator Complex<O> ()
+	{
+		return Complex<O>(re, im);
+	}
 	inline Complex<T> operator = (T a)
 	{
 		re = a;

@@ -6,10 +6,10 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 
 #pragma once
 
-template <typename TYPE, int NUM>
+template <typename TYPE, typename BUF, int NUM>
 class Delay
 {
-	TYPE buf[NUM] = { 0 };
+	BUF buf[NUM] = { 0 };
 	int pos = 0;
 public:
 	TYPE operator () (TYPE input)

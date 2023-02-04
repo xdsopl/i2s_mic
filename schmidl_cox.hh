@@ -12,12 +12,13 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 template<typename cmplx, int symbol_len, int guard_len>
 class SchmidlCox {
 	typedef typename cmplx::value_type value;
+	typedef Complex<int8_t> cmplx8;
 	static constexpr int match_len = guard_len | 1;
 	static constexpr int match_del = (match_len - 1) / 2;
 	SMA<cmplx, symbol_len> cor;
 	SMA<value, 2 * symbol_len> pwr;
 	SMA<value, match_len> match;
-	Delay<cmplx, symbol_len> delay;
+	Delay<cmplx, cmplx8, symbol_len> delay;
 	Clipper<cmplx, -127, 127> clip;
 public:
 	value operator()(cmplx iq) {
