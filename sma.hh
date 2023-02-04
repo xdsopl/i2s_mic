@@ -8,10 +8,10 @@ Copyright 2023 Ahmet Inan <xdsopl@gmail.com>
 
 #include "delay.hh"
 
-template <typename TYPE, int NUM>
+template <typename TYPE, typename BUF, int NUM>
 class SMA
 {
-	Delay<TYPE, TYPE, NUM> delay;
+	Delay<TYPE, BUF, NUM> delay;
 	TYPE sum = 0;
 public:
 	TYPE operator () (TYPE input)
