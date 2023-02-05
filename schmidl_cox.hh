@@ -20,9 +20,9 @@ class SchmidlCox {
 	SMA<value, uint16_t, 2 * symbol_len> pwr;
 	SMA<value, uint16_t, match_len> match;
 	Delay<cmplx, cmplx8, symbol_len> delay;
-	Clipper<cmplx, -127, 127> clip_s8;
+	Clipper<cmplx, -128, 127> clip_s8;
 	Clipper<cmplx, 0, 255> clip_u8;
-	Clipper<cmplx, -32767, 32767> clip_s16;
+	Clipper<cmplx, -32768, 32767> clip_s16;
 	Clipper<cmplx, 0, 65536> clip_u16;
 public:
 	value operator()(cmplx iq) {
