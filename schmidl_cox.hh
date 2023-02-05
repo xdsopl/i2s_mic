@@ -21,8 +21,8 @@ class SchmidlCox {
 	SMA<value, uint16_t, 2 * symbol_len> pwr;
 	SMA<value, uint16_t, match_len> match;
 	Delay<cmplx, cmplx8, symbol_len> delay;
-	Delay<cmplx8, cmplx8, match_del> align;
-	CORDIC<cmplx8> arg;
+	Delay<int8_t, int8_t, match_del> align;
+	CORDIC<cmplx, int32_t, int8_t> arg;
 	Clipper<cmplx, -128, 127> clip_s8;
 	Clipper<cmplx, 0, 255> clip_u8;
 	Clipper<cmplx, -32768, 32767> clip_s16;
@@ -32,9 +32,8 @@ public:
 		iq = clip_s8(iq);
 		cmplx P = cor(clip_s16(delay(iq) * conj(iq)));
 		value R = pwr(clip_u16(norm(iq)));
-		cmplx PR = (P << 9) / R;
-		value timing = match(clip_u16(norm(PR)));
-		int8_t phase = arg(align(clip_s8(PR >> 1)));
+		value timing = match(clip_u16(norm((P << 9) / R)));
+		int8_t phase = align(arg(P));
 		printf("%ld %d\n", timing, phase);
 	}
 };
