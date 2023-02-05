@@ -46,8 +46,7 @@ int main()
 	while (1) {
 		value left = pio_sm_get_blocking(pio, sm);
 		cmplx iq = hilbert(agc(block_dc(left >> 8)));
-		value val = correlator(iq);
-		printf("%ld\n", val);
+		correlator(iq);
 	}
 	return 0;
 }
