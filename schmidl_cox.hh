@@ -23,7 +23,7 @@ class SchmidlCox {
 	Clipper<cmplx, -128, 127> clip_s8;
 	Clipper<cmplx, 0, 255> clip_u8;
 	Clipper<cmplx, -32768, 32767> clip_s16;
-	Clipper<cmplx, 0, 65536> clip_u16;
+	Clipper<cmplx, 0, 65535> clip_u16;
 public:
 	value operator()(cmplx iq) {
 		iq = clip_s8(iq);
