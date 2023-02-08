@@ -47,7 +47,7 @@ int main()
 		value left = pio_sm_get_blocking(pio, sm);
 		cmplx iq = hilbert(agc(block_dc(left >> 8)));
 		if (correlator(iq))
-			printf("symbol at %d with phase %d?\n", correlator.symbol_pos, correlator.frac_cfo);
+			printf("symbol at %d with fractional CFO %f Hz?\n", correlator.symbol_pos, (- 6.25f / 128) * correlator.frac_cfo);
 	}
 	return 0;
 }
