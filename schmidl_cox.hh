@@ -44,7 +44,6 @@ public:
 		int8_t phase = align(arg(P));
 		bool collect = threshold(timing);
 		bool process = falling(collect);
-		bool okay = true;
 
 		if (!collect && !process)
 			return false;
@@ -55,21 +54,21 @@ public:
 			index_max = match_del;
 		} else if (index_max < symbol_len + guard_len + match_del) {
 			++index_max;
-		} else {
-			okay = false;
+		} else if (process) {
+			timing_max = 0;
+			index_max = 0;
+			return false;
 		}
 
 		if (!process)
 			return false;
 
-		if (okay) {
-			symbol_pos = index_max;
-			frac_cfo = phase_max;
-		}
+		symbol_pos = index_max;
+		frac_cfo = phase_max;
 		timing_max = 0;
 		phase_max = 0;
 		index_max = 0;
-		return okay;
+		return true;
 	}
 };
 
