@@ -40,14 +40,14 @@ int main()
 	BlockDC<value, 4> block_dc;
 	AGC<value, 8, 8000> agc;
 	static Hilbert<cmplx> hilbert;
-	const int symbol_len = 1280;
+	const int symbol_len = 256;
 	const int guard_len = symbol_len / 8;
-	static SchmidlCox<cmplx, symbol_len/2, guard_len> correlator;
+	static SchmidlCox<cmplx, symbol_len, guard_len> correlator;
 	while (1) {
 		value left = pio_sm_get_blocking(pio, sm);
 		cmplx iq = hilbert(agc(block_dc(left >> 8)));
 		if (correlator(iq))
-			printf("symbol at %d with fractional CFO %f Hz?\n", correlator.symbol_pos, (- 6.25f / 128) * correlator.frac_cfo);
+			printf("symbol at %d with fractional CFO %f Hz?\n", correlator.symbol_pos, (- 31.25f / 128) * correlator.frac_cfo);
 	}
 	return 0;
 }
