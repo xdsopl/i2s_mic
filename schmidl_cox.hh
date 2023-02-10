@@ -23,7 +23,7 @@ class SchmidlCox {
 	SMA<value, uint16_t, match_len> match;
 	Delay<cmplx, cmplx8, symbol_len> delay;
 	Delay<int8_t, int8_t, match_del> align;
-	SchmittTrigger<value, 2 << 20, 3 << 20> threshold;
+	SchmittTrigger<value, 2 << 18, 3 << 18> threshold;
 	FallingEdgeTrigger falling;
 	CORDIC<cmplx, int32_t, int8_t> arg;
 	Clipper<cmplx, -128, 127> clip_s8;
