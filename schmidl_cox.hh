@@ -48,7 +48,7 @@ public:
 		if (!collect && !process)
 			return false;
 
-		if (timing_max < timing) {
+		if (timing_max <= timing) {
 			timing_max = timing;
 			phase_max = phase;
 			index_max = match_del;
